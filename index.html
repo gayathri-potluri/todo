@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>TO DO LIST</title>
+    <style>
+        body { 
+            font-family: 'Times New Roman', Times, serif; 
+            text-align: center; 
+            background-size: cover;
+            background-position: center;
+            transition: background 0.5s ease;
+            margin: 0;
+        }
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.1px 5px;
+            transition: background 0.5s ease, color 0.5s ease;
+        }
+        .light-mode header {
+            background: #fadbee;
+            color: rgb(0, 7, 37);
+        }
+        .dark-mode header {
+            background: #222;
+            color: white;
+        }
+        .theme-toggle {
+            cursor: pointer;
+            border: none;
+            background: none;
+        }
+        .theme-toggle img {
+            width: 30px;
+            height: 30px;
+        }
+        #taskList { 
+            text-align: left; 
+            margin: 20px auto; 
+            width: 50%;
+            padding: 0;
+        }
+        li { 
+            margin: 10px 0; 
+            cursor: pointer; 
+            display: flex;
+            justify-content: space-between; 
+            align-items: center; 
+            min-height: 30px; 
+            list-style-type: none; 
+        }
+        .task-text { 
+            flex-grow: 1; 
+            font-size: 20px;
+        }
+        .completed .task-text { 
+            text-decoration: line-through; 
+            color: rgb(104, 103, 103); 
+        }
+        button, .remove-img {
+            font-size: 12px;
+            padding: 5px 10px;
+            cursor: pointer;
+            flex-shrink: 0; 
+        }
+        .remove-img {
+            width: 20px; 
+            height: 20px;
+        }
+        .light-mode {
+            background-image: url('light.jpg');
+            color: black;
+        }
+        .dark-mode {
+            background-image: url('dark.jpg');
+            color: white;
+        }
+    </style>
+</head>
+<body class="light-mode">
+    <header>
+        <h1>To Do List</h1>
+        <button class="theme-toggle" onclick="toggleTheme()">
+            <img src="on.png" alt="Toggle Theme" id="themeIcon">
+        </button>
+    </header>
+    
+    <h1>Task List</h2>
+    <input type="text" id="taskInput" placeholder="Enter a task">
+    <button onclick="addTask()">Add Task</button>
+    <ul id="taskList"></ul>
+
+    <script>
+        function addTask() {
+            let taskText = document.getElementById("taskInput").value;
+            if (taskText === "") return;
+
+            let li = document.createElement("li");
+
+            let taskSpan = document.createElement("span"); 
+            taskSpan.textContent = taskText;
+            taskSpan.classList.add("task-text");
+            taskSpan.onclick = function() { li.classList.toggle("completed"); };
+
+            let removeImg = document.createElement("img");
+            removeImg.src = "bin.png"; 
+            removeImg.alt = "Remove Task";
+            removeImg.classList.add("remove-img");
+            removeImg.onclick = function() { li.remove(); };
+
+            li.appendChild(taskSpan);
+            li.appendChild(removeImg); 
+            document.getElementById("taskList").appendChild(li);
+            document.getElementById("taskInput").value = "";
+        }
+
+        document.getElementById("taskInput").addEventListener("keypress", function(event) {
+            if (event.key === "Enter") {
+                addTask(); 
+            }
+        });
+
+        function toggleTheme() {
+            let body = document.body;
+            let themeIcon = document.getElementById("themeIcon");
+            
+            if (body.classList.contains("light-mode")) {
+                body.classList.remove("light-mode");
+                body.classList.add("dark-mode");
+                themeIcon.src = "off.png";
+                localStorage.setItem("theme", "dark");
+            } else {
+                body.classList.remove("dark-mode");
+                body.classList.add("light-mode");
+                themeIcon.src = "on.png";
+                localStorage.setItem("theme", "light");
+            }
+        }
+
+//        window.onload = function() {
+  //          let savedTheme = localStorage.getItem("theme");
+    //        let themeIcon = document.getElementById("themeIcon");
+      //      if (savedTheme === "light") {
+        //        document.body.classList.remove("light-mode");
+          //      document.body.classList.add("dark-mode");
+            //    themeIcon.src = "off.png";
+           // }
+       // }
+    </script>
+</body>
+</html>
